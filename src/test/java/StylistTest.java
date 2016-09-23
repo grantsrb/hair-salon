@@ -54,4 +54,14 @@ public class StylistTest {
     testStylist2.save();
     assertEquals(false, Stylist.getAll().get(1).equals(testStylist));
   }
+
+  @Test
+  public void findByName_returnFirstStylistWithTheSpecifiedName_Stylist() {
+    Stylist testStylist = new Stylist("Jom Terry");
+    testStylist.save();
+    assertEquals(true, testStylist.equals(Stylist.findByName("Jom Terry")));
+    Stylist.findByName("Jom Terry").delete();
+    assertEquals("combined delete test", null, Stylist.findByName("Jom Terry"));
+  }
+
 }

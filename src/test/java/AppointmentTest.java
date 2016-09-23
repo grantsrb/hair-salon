@@ -41,4 +41,16 @@ public class AppointmentTest {
     testAppointment.save();
     assertEquals(testStylist.getId(), testAppointment.getStylistId());
   }
+
+  @Test
+  public void conflictExists_returnsTrueIfScheduleConflictExists_boolean() {
+    Stylist testStylist = new Stylist("Roppy Bap");
+    testStylist.save();
+    Client testClient = new Client("Hubert Graxvest", testStylist.getId());
+    testClient.save();
+    Appointment testAppointment = new Appointment("11/11", "11:11", testClient.getId());
+    testAppointment.save();
+    Appointment conflict = new Appointment("11/11", "11:11", testClient.getId());
+    assertTrue(Appointment.conflictExists(conflict));
+  }
 }

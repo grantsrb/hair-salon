@@ -56,4 +56,11 @@ public class ClientTest {
     testClient2.save();
     assertEquals(false, Client.getAll().get(1).equals(testClient));
   }
+
+  @Test
+  public void findByName_returnFirstClientWithTheSpecifiedName_Stylist() {
+    Client testClient = new Client("Jom Terry", 1);
+    testClient.save();
+    assertEquals(true, testClient.equals(Client.findByName("Jom Terry")));
+  }
 }

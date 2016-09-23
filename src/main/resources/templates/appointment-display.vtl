@@ -1,5 +1,10 @@
-<h3>Appointment with $stylist.getName()</h3>
+<h2>Appointment with $stylist.getName()</h2>
 
 <h4>Date: $appointment.getDate()</h4>
 <h4>Time: $appointment.getTime()</h4>
-<h4>Client: $client.getname()</h4>
+<h4>Client: $client.getName()</h4>
+
+
+<a href="/stylists/$stylist.getId()">Back to Stylist: $stylist.getName()</a><br>
+<a href="/stylists/$stylist.getId()/clients/$client.getId()">Back to Client: $client.getName()</a><br>
+<a href="/">Home</a>

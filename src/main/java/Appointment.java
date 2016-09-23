@@ -103,4 +103,19 @@ public class Appointment {
     }
   }
 
+  public static boolean conflictExists(Appointment _appointment) {
+    List<Appointment> apptList = new ArrayList<>();
+    try (Connection con = DB.sql2o.open()) {
+       apptList = con.createQuery("SELECT * FROM appointments WHERE date = :date AND time = :time")
+        .addParameter("date", _appointment.getDate())
+        .addParameter("time", _appointment.getTime())
+        .executeAndFetch(Appointment.class);
+    }
+    for (int i = 0; i < apptList.size(); i++) {
+      if (_appointment.getClientId() == apptList.get(i).getClientId() || _appointment.getStylistId() == apptList.get(i).getStylistId())
+        return true;
+    }
+    return false;
+  }
+
 }

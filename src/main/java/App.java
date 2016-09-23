@@ -15,21 +15,20 @@ public class App {
       return new ModelAndView(homepageModel(), layout);
     }, new VelocityTemplateEngine());
 
-    get("/stylists/:stylistId", (request, response) -> {
+    post("/stylists/:stylistId/clients/:clientId/appointments/add", (request, response) -> {
       Map<String,Object> model = new HashMap<>();
-      int stylistId = Integer.parseInt(request.params(":stylistId"));
-      model.put("stylist", Stylist.findById(stylistId));
-      model.put("template", "templates/stylist-display.vtl");
-      return new ModelAndView(model, layout);
-    }, new VelocityTemplateEngine());
-
-    get("/stylists/:stylistId/clients/:clientId", (request, response) -> {
-      Map<String,Object> model = new HashMap<>();
+      String date = request.queryParams("date");
+      String time = request.queryParams("time");
       int clientId = Integer.parseInt(request.params(":clientId"));
       int stylistId = Integer.parseInt(request.params(":stylistId"));
+      Appointment newAppointment = new Appointment(date, time, clientId);
+      if (!Appointment.conflictExists(newAppointment)) {
+        newAppointment.save();
+        model.put("appointmentConflict", true);
+      }
       model.put("stylist", Stylist.findById(stylistId));
       model.put("client", Client.findById(clientId));
-      model.put("template", "templates/stylist-display.vtl");
+      model.put("template", "templates/client-display.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -41,6 +40,38 @@ public class App {
       model.put("stylist", Stylist.findById(stylistId));
       model.put("client", Client.findById(clientId));
       model.put("appointment", Appointment.findById(appointmentId));
+      model.put("template", "templates/appointment-display.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/stylists/:id/clients/add", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      String clientName = request.queryParams("client-name");
+      int stylistId = Integer.parseInt(request.params(":id"));
+      if (Client.findByName(clientName) == null && !clientName.equals("")) {
+        clientName = clientName.toLowerCase();
+        Client newClient = new Client(clientName, stylistId);
+        newClient.save();
+      }
+      model.put("stylist", Stylist.findById(stylistId));
+      model.put("template", "templates/stylist-display.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/stylists/:stylistId/clients/:clientId", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      int clientId = Integer.parseInt(request.params(":clientId"));
+      int stylistId = Integer.parseInt(request.params(":stylistId"));
+      model.put("stylist", Stylist.findById(stylistId));
+      model.put("client", Client.findById(clientId));
+      model.put("template", "templates/client-display.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/stylists/:stylistId", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      int stylistId = Integer.parseInt(request.params(":stylistId"));
+      model.put("stylist", Stylist.findById(stylistId));
       model.put("template", "templates/stylist-display.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -85,6 +116,54 @@ public class App {
       User.setLoggedInUser(null);
       return new ModelAndView(homepageModel(), layout);
     },new VelocityTemplateEngine());
+
+    post("/stylists/update",  (request, response) -> {
+      String direction = request.queryParams("hiddenStylistButton");
+      String stylistName = request.queryParams("stylist-name");
+      stylistName = stylistName.toLowerCase();
+      if (direction.equals("Add") && Stylist.findByName(stylistName) == null && !stylistName.equals("")) {
+        Stylist newStylist = new Stylist(stylistName);
+        newStylist.save();
+      } else {
+        if(Stylist.findByName(stylistName) != null && !stylistName.equals(""))
+          Stylist.findByName(stylistName).delete();
+      }
+      return new ModelAndView(homepageModel(), layout);
+    },new VelocityTemplateEngine());
+
+    post("/clients/update",  (request, response) -> {
+      String direction = request.queryParams("hiddenClientButton");
+      String clientName = request.queryParams("client-name");
+      String rawStylistId = request.queryParams("stylist-id");
+      clientName = clientName.toLowerCase();
+      if (direction.equals("Add") && Client.findByName(clientName) == null && !clientName.equals("") && !rawStylistId.equals("")) {
+        int stylistId = Integer.parseInt(rawStylistId);
+        Client newClient = new Client(clientName, stylistId);
+        newClient.save();
+      } else {
+        if(Client.findByName(clientName) != null && !clientName.equals(""))
+          Client.findByName(clientName).delete();
+      }
+      return new ModelAndView(homepageModel(), layout);
+    },new VelocityTemplateEngine());
+
+    post("/appointments/update", (request, response) -> {
+      String date = request.queryParams("date");
+      String time = request.queryParams("time");
+      String rawClientId = request.queryParams("client-id");
+      Map<String,Object> model = homepageModel();
+      if (!rawClientId.equals("")) {
+        int clientId = Integer.parseInt(rawClientId);
+        Appointment newAppointment = new Appointment(date, time, clientId);
+        if (!Appointment.conflictExists(newAppointment)) {
+          newAppointment.save();
+        } else {
+          model.put("appointmentConflict", true);
+        }
+      }
+      return new ModelAndView(model, layout);
+    },new VelocityTemplateEngine());
+
   }
 
   //////////////////////////////////////////////////////////
@@ -96,6 +175,7 @@ public class App {
     model.put("appointments", Appointment.getAll());
     model.put("loggedInUser", User.getLoggedInUser());
     model.put("signedIn", User.getLogInStatus());
+    model.put("appointmentConflict", false);
     model.put("template", "templates/index.vtl");
     return model;
   }

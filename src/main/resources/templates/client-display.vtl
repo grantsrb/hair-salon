@@ -1,13 +1,12 @@
-<h3>$client.getName()</h3><br>
+<h2>$client.getName()</h2><br>
 <div class="row">
   <div class="col-md-3">
-    <h4>Stylist: <strong>$stylist</strong></h4>
-
+    <h4>Stylist: <strong>$stylist.getName()</strong></h4>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
     <h3>Appointments</h3>
-    #if($client.getAppointments() > 0)
+    #if($client.getAppointments().size() > 0)
       <ul>
         #foreach($appointment in $stylist.getAppointments())
           <li><a href="/stylists/$appointment.getStylistId()/clients/$appointment.getClientId()/appointments/$appointment.getId()">$appointment.getDate()</a></li>
@@ -16,5 +15,28 @@
     #else
       <h5><em>No appointments have been added yet!</em></h5>
     #end
+
   </div>
+
+  <div class="col-md-4">
+    <h4>New Appointment</h4>
+    <form action="/stylists/$stylist.getId()/clients/$client.getId()/appointments/add" method="post">
+      <div class="form-group">
+        <label for="date">Enter a date:</label>
+        <input type="text" id="date" name="date" placeholder="mm/dd" required>
+      </div>
+      <div class="form-group">
+        <label for="time">Enter a time:</label>
+        <input type="text" id="time" name="time" placeholder="hh:mm" required>
+      </div>
+      <input type="submit" value="Add">
+    </form>
+    #if($appointmentConflict)
+      <p><em>Appointment conflict!</em></p>
+    #end
+  </div>
+
 </div>
+
+<a href="/stylists/$stylist.getId()">Back to Stylist: $stylist.getName()</a><br>
+<a href="/">Home</a>

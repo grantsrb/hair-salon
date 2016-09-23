@@ -73,6 +73,14 @@ public class Stylist {
     }
   }
 
+  public static Stylist findByName(String _name) {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM stylists WHERE name = :name")
+        .addParameter("name", _name)
+        .executeAndFetchFirst(Stylist.class);
+    }
+  }
+
   public static List<Stylist> getAll() {
     try (Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM stylists")

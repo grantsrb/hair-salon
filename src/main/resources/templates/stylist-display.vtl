@@ -1,8 +1,8 @@
-<h3>$stylist.getName()</h3><br>
+<h2>$stylist.getName()</h2><br>
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-4">
     <h3>Clients</h3>
-    #if($stylist.getClients() > 0)
+    #if($stylist.getClients().size() > 0)
       <ul>
         #foreach($client in $stylist.getClients())
           <li><a href="/stylists/$client.getStylistId()/clients/$client.getId()">$client.getName()</a></li>
@@ -11,11 +11,18 @@
     #else
       <h5><em>No clients have been added yet!</em></h5>
     #end
+    <form action="/stylists/$stylist.getId()/clients/add" method="post">
+      <div class="form-group">
+        <label for="client-name">Enter a client's name to add or delete:</label>
+        <input type="text" id="client-name" name="client-name" placeholder="Enter name here" required>
+      </div>
+      <input type="submit" value="Add">
+    </form>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
     <h3>Appointments</h3>
-    #if($stylist.getAppointments() > 0)
+    #if($stylist.getAppointments().size() > 0)
       <ul>
         #foreach($appointment in $stylist.getAppointments())
           <li><a href="/stylists/$appointment.getStylistId()/clients/$appointment.getClientId()/appointments/$appointment.getId()">$appointment.getDate()</a></li>
@@ -26,3 +33,4 @@
     #end
   </div>
 </div>
+<a href="/">Home</a>

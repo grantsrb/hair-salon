@@ -77,6 +77,14 @@ public class Client {
     }
   }
 
+  public static Client findByName(String _name) {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM clients WHERE name = :name")
+        .addParameter("name", _name)
+        .executeAndFetchFirst(Client.class);
+    }
+  }
+
   public static List<Client> getAll() {
     try (Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM clients")

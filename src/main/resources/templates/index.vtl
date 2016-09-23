@@ -1,6 +1,8 @@
 <div class="row">
   <div class="col-md-3">
+
     <h3>Stylists</h3>
+
     #if($stylists.size() > 0)
       <ul>
         #foreach($stylist in $stylists)
@@ -10,10 +12,28 @@
     #else
       <h5><em>No stylists have been added yet!</em></h5>
     #end
+
+    <form action="/stylists/update" method="post">
+      <div class="form-group">
+        <label for="stylist-name">Enter a stylist's name to add or delete: </label>
+        <input type="text" id="stylist-name" name="stylist-name" placeholder="Enter name here" required>
+      </div>
+      <input type="hidden" name="hiddenStylistButton">
+      <label>
+        <input type="submit" value="Add" onclick="this.form.hiddenStylistButton.value=this.value;this.form.action='/stylists/update';this.form.submit();">
+        #if($stylists.size() > 0)
+          <input type="submit" value="Delete" onclick="this.form.hiddenStylistButton.value=this.value;this.form.action='/stylists/update';this.form.submit();">
+        #end
+      </label>
+    </form>
   </div>
 
+
+
   <div class="col-md-3">
+
     <h3>Clients</h3>
+
     #if($clients.size() > 0)
       <ul>
         #foreach($client in $clients)
@@ -23,10 +43,35 @@
     #else
       <h5><em>No clients have been added yet!</em></h5>
     #end
+    <form action="/clients/update" method="post">
+      <div class="form-group">
+        <label for="stylist-id">Pick the client's stylist: </label>
+        <select id="stylist-id" name="stylist-id" type="text" required>
+          #foreach($stylist in $stylists)
+            <option value="$stylist.getId()">$stylist.getName()</option>
+          #end
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="client-name">Enter a client's name to add or delete:</label>
+        <input type="text" id="client-name" name="client-name" placeholder="Enter name here" required>
+      </div>
+      <input type="hidden" name="hiddenClientButton">
+      <label>
+        <input type="submit" value="Add" onclick="this.form.hiddenClientButton.value=this.value;this.form.action='/clients/update';this.form.submit();">
+        #if($clients.size() > 0)
+          <input type="submit" value="Delete" onclick="this.form.hiddenClientButton.value=this.value;this.form.action='/clients/update';this.form.submit();">
+        #end
+      </label>
+    </form>
   </div>
 
+
+
   <div class="col-md-3">
+
     <h3>Appointments</h3>
+
     #if($appointments.size() > 0)
       <ul>
         #foreach($appointment in $appointments)
@@ -35,6 +80,29 @@
       </ul>
     #else
       <h5><em>No appointments have been added yet!</em></h5>
+    #end
+
+    <form action="/appointments/update" method="post">
+      <div class="form-group">
+        <label for="client-id">Pick a client to schedule the appointment for: </label>
+        <select id="client-id" name="client-id" type="text" required>
+          #foreach($client in $clients)
+            <option value="$client.getId()">$client.getName()</option>
+          #end
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="date">Enter a date:</label>
+        <input type="text" id="date" name="date" placeholder="mm/dd" required>
+      </div>
+      <div class="form-group">
+        <label for="time">Enter a time:</label>
+        <input type="text" id="time" name="time" placeholder="hh:mm" required>
+      </div>
+      <input type="submit" value="Add">
+    </form>
+    #if($appointmentConflict)
+      <p><em>Appointment conflict!</em></p>
     #end
   </div>
 </div>
