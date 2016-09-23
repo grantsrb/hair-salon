@@ -40,8 +40,11 @@ Delete this information from database | NA | NA
 ## Setup/Installation Requirements
 
 * _Clone this repository to your desktop_
-* _In terminal, navigate to /spark-dictionary and type: $ gradle run_
-* _Using a browser, make an http request to this url: localhost:4567_
+* _In PSQL type the following command: CREATE DATABASE hair_salon;_
+* _In terminal, navigate to the cloned /hair-salon folder and type: psql hair_salon < hair_salon.sql_
+* _In PSQL type: CREATE DATABASE hair_salon_test TEMPLATE hair_salon;_
+* _In terminal type: $ gradle run_
+* _Using a browser, make an http request to url: localhost:4567_
 
 ## Known Bugs
 
