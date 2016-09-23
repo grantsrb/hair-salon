@@ -30,4 +30,15 @@ public class AppointmentTest {
     testAppointment.delete();
     assertEquals("delete test", null, Appointment.findById(testAppointment.getId()));
   }
+
+  @Test
+  public void getStylistId_returnsStylistIdOfInternalClient_int() {
+    Stylist testStylist = new Stylist("Roppy Bap");
+    testStylist.save();
+    Client testClient = new Client("Hubert Graxvest", testStylist.getId());
+    testClient.save();
+    Appointment testAppointment = new Appointment("11/11", "11:11", testClient.getId());
+    testAppointment.save();
+    assertEquals(testStylist.getId(), testAppointment.getStylistId());
+  }
 }

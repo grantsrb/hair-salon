@@ -6,7 +6,6 @@ public class Appointment {
   private String date;
   private String time;
   private int clientId;
-  // private int stylistId;
   private int id;
 
 
@@ -15,7 +14,6 @@ public class Appointment {
     this.date = _date;
     this.time = _time;
     this.clientId = _clientId;
-    // this.stylistId = Client.findById(_clientId).getStylistId();
   }
 
   public String getDate() {
@@ -54,9 +52,9 @@ public class Appointment {
     return this.clientId;
   }
 
-  // public int getStylistId() {
-  //   return this.stylistId;
-  // }
+  public int getStylistId() {
+    return Client.findById(this.clientId).getStylistId();
+  }
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
@@ -79,14 +77,6 @@ public class Appointment {
     }
   }
 
-  // public List<Stylist> getStylists() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     return con.createQuery("SELECT * FROM stylists WHERE id = :id")
-  //       .addParameter("id", this.stylistId)
-  //       .executeAndFetch(Stylist.class);
-  //   }
-  // }
-
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
       con.createQuery("DELETE FROM appointments WHERE id = :id")
@@ -103,6 +93,13 @@ public class Appointment {
       return con.createQuery("SELECT * FROM appointments WHERE id = :id")
         .addParameter("id", _id)
         .executeAndFetchFirst(Appointment.class);
+    }
+  }
+
+  public static List<Appointment> getAll() {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM appointments")
+        .executeAndFetch(Appointment.class);
     }
   }
 

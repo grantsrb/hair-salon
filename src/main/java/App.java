@@ -13,7 +13,10 @@ public class App {
 
     get("/", (request, response) -> {
       Map<String,Object> model = new HashMap<>();
-      
+      model.put("stylists", Stylist.getAll());
+      model.put("clients", Client.getAll());
+      model.put("appointments", Appointment.getAll());
+      model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
   }
