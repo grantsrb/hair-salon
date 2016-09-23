@@ -13,7 +13,7 @@ public class DatabaseRule extends ExternalResource {
       con.createQuery("DELETE FROM appointments").executeUpdate();
       con.createQuery("DELETE FROM clients").executeUpdate();
       con.createQuery("DELETE FROM stylists").executeUpdate();
-      // con.createQuery("DELETE FROM users").executeUpdate();
+      con.createQuery("DELETE FROM users").executeUpdate();
     }
   }
 }

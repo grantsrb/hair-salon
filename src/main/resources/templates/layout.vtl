@@ -1,15 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../app.css" media="screen" title="no title">
     <meta charset="utf-8">
-    <title>Dictionary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hair-Salon</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../../css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/styles.css" type="text/css">
+    #if (!$signedIn)
+      <link rel="stylesheet" href="../../css/hide-forms.css" type="text/css">
+    #end
   </head>
   <body>
-    <div class="container">
-      <h1>Personal Dictionary!</h1>
-      #parse($template)
+    <div class="jumbotron">
+      <div class="signed-in">
+        #if($signedIn)
+          <p>Welcome, $loggedInUser.getUserName()</p>
+        #end
+      </div>
+      <div class="sign-in">
+        #if($signedIn)
+          <form action="/sign-out" method="post" id="sign-in-button">
+            <input type="submit" value="Sign Out">
+          </form>
+        #else
+          <form action="/sign-in" method="get">
+            <input type="submit" value="Sign In">
+          </form>
+        #end
+      </div>
+      <div class="container" id="title">
+        <h1>Hair Salon</h1>
+      </div>
+    </div>
+    <div id="main">
+      <div id="hack-transparency" class="container">
+        #parse( $template )
+      </div>
     </div>
   </body>
 </html>

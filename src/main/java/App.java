@@ -11,5 +11,10 @@ public class App {
     String layout = "templates/layout.vtl";
     staticFileLocation("/public");
 
+    get("/", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
   }
 }
