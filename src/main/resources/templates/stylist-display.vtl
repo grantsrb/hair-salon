@@ -1,22 +1,10 @@
+<h3>$stylist.getName()</h3><br>
 <div class="row">
   <div class="col-md-3">
-    <h3>Stylists</h3>
-    #if($stylists.size() > 0)
-      <ul>
-        #foreach($stylist in $stylists)
-          <li><a href="/stylists/$stylist.getId()">$stylist.getName()</a></li>
-        #end
-      </ul>
-    #else
-      <h5><em>No stylists have been added yet!</em></h5>
-    #end
-  </div>
-
-  <div class="col-md-3">
     <h3>Clients</h3>
-    #if($clients.size() > 0)
+    #if($stylist.getClients() > 0)
       <ul>
-        #foreach($client in $clients)
+        #foreach($client in $stylist.getClients())
           <li><a href="/stylists/$client.getStylistId()/clients/$client.getId()">$client.getName()</a></li>
         #end
       </ul>
@@ -27,9 +15,9 @@
 
   <div class="col-md-3">
     <h3>Appointments</h3>
-    #if($appointments.size() > 0)
+    #if($stylist.getAppointments() > 0)
       <ul>
-        #foreach($appointment in $appointments)
+        #foreach($appointment in $stylist.getAppointments())
           <li><a href="/stylists/$appointment.getStylistId()/clients/$appointment.getClientId()/appointments/$appointment.getId()">$appointment.getDate()</a></li>
         #end
       </ul>

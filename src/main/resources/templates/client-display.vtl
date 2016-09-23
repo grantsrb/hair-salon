@@ -1,0 +1,20 @@
+<h3>$client.getName()</h3><br>
+<div class="row">
+  <div class="col-md-3">
+    <h4>Stylist: <strong>$stylist</strong></h4>
+
+  </div>
+
+  <div class="col-md-3">
+    <h3>Appointments</h3>
+    #if($client.getAppointments() > 0)
+      <ul>
+        #foreach($appointment in $stylist.getAppointments())
+          <li><a href="/stylists/$appointment.getStylistId()/clients/$appointment.getClientId()/appointments/$appointment.getId()">$appointment.getDate()</a></li>
+        #end
+      </ul>
+    #else
+      <h5><em>No appointments have been added yet!</em></h5>
+    #end
+  </div>
+</div>
