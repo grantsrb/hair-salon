@@ -45,4 +45,13 @@ public class StylistTest {
     assertTrue("test 1",testStylist.getClients().get(0).equals(testClient));
     assertTrue("test 2",testStylist.getClients().get(1).equals(testClient2));
   }
+
+  @Test
+  public void getAll_returnsListOfAllStylists_ArrayList() {
+    Stylist testStylist = new Stylist("Jom Terry");
+    testStylist.save();
+    Stylist testStylist2 = new Stylist("Kom Blarry");
+    testStylist2.save();
+    assertEquals(false, Stylist.getAll().get(1).equals(testStylist));
+  }
 }

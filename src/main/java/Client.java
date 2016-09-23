@@ -77,6 +77,13 @@ public class Client {
     }
   }
 
+  public static List<Client> getAll() {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM clients")
+        .executeAndFetch(Client.class);
+    }
+  }
+
   @Override
   public boolean equals(Object _testObj) {
     if(!(_testObj instanceof Client))

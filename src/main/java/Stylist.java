@@ -73,6 +73,13 @@ public class Stylist {
     }
   }
 
+  public static List<Stylist> getAll() {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM stylists")
+        .executeAndFetch(Stylist.class);
+    }
+  }
+
   @Override
   public boolean equals(Object _testObj) {
     if(!(_testObj instanceof Stylist))

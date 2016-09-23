@@ -47,4 +47,13 @@ public class ClientTest {
     assertEquals("by appts list", appts.get(0), testAppointment);
     assertEquals("by getAppointments list", testClient.getAppointments().get(1), testAppointment2);
   }
+
+  @Test
+  public void getAll_returnsListOfAllClients_ArrayList() {
+    Client testClient = new Client("Jom Terry", 1);
+    testClient.save();
+    Client testClient2 = new Client("Kom Blarry", 1);
+    testClient2.save();
+    assertEquals(false, Client.getAll().get(1).equals(testClient));
+  }
 }
