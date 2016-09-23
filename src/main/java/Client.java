@@ -54,6 +54,9 @@ public class Client {
   }
 
   public void delete() {
+    List<Appointment> appointments = this.getAppointments();
+    for(int i = 0; i < appointments.size(); i++)
+      appointments.get(i).delete();
     try (Connection con = DB.sql2o.open()) {
       con.createQuery("DELETE FROM clients WHERE id=:id")
         .addParameter("id", this.id)

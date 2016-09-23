@@ -37,6 +37,9 @@ public class Stylist {
   }
 
   public void delete() {
+    List<Client> clients = this.getClients();
+    for (int i = 0; i < clients.size(); i++)
+      clients.get(i).delete();
     try (Connection con = DB.sql2o.open()) {
       con.createQuery("DELETE FROM stylists WHERE id=:id")
         .addParameter("id", this.id)

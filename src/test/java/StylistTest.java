@@ -30,8 +30,22 @@ public class StylistTest {
   public void delete_deletesInformationWithinDatabase_void() {
     Stylist testStylist = new Stylist("Jom Terry");
     testStylist.save();
+    Client testClient = new Client("Jilly", testStylist.getId());
+    testClient.save();
+    Client testClient2 = new Client("Billy", testStylist.getId());
+    testClient2.save();
+    Appointment testAppointment = new Appointment("1111", "1111", testClient.getId());
+    Appointment testAppointment2 = new Appointment("1111", "1111", testClient.getId());
+    testAppointment.save();
+    testAppointment2.save();
+    assertTrue("pre-test client", testStylist.getClients().get(1).equals(testClient2));
+    assertTrue( "pre-test appointment",testStylist.getClients().get(0).getAppointments().get(0).equals(testAppointment));
     testStylist.delete();
-    assertEquals("delete test", null, Stylist.findById(testStylist.getId()));
+    assertEquals("delete stylist", null, Stylist.findById(testStylist.getId()));
+    assertEquals("delete client",null,Client.findById(testClient.getId()));
+    assertEquals("delete client2",null,Client.findById(testClient2.getId()));
+    assertEquals("delete appointment", null, Appointment.findById(testAppointment.getId()));
+    assertEquals("delete appointment2", null, Appointment.findById(testAppointment2.getId()));
   }
 
   @Test

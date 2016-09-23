@@ -136,6 +136,40 @@ ALTER SEQUENCE stylists_id_seq OWNED BY stylists.id;
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: satchelgrant
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    username character varying,
+    password character varying
+);
+
+
+ALTER TABLE users OWNER TO satchelgrant;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: satchelgrant
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_id_seq OWNER TO satchelgrant;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: satchelgrant
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: satchelgrant
 --
 
@@ -157,6 +191,13 @@ ALTER TABLE ONLY stylists ALTER COLUMN id SET DEFAULT nextval('stylists_id_seq':
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: satchelgrant
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
 -- Data for Name: appointments; Type: TABLE DATA; Schema: public; Owner: satchelgrant
 --
 
@@ -168,7 +209,7 @@ COPY appointments (id, date, "time", clientid) FROM stdin;
 -- Name: appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: satchelgrant
 --
 
-SELECT pg_catalog.setval('appointments_id_seq', 1, false);
+SELECT pg_catalog.setval('appointments_id_seq', 3, true);
 
 
 --
@@ -183,7 +224,7 @@ COPY clients (id, name, stylistid) FROM stdin;
 -- Name: clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: satchelgrant
 --
 
-SELECT pg_catalog.setval('clients_id_seq', 1, false);
+SELECT pg_catalog.setval('clients_id_seq', 5, true);
 
 
 --
@@ -198,7 +239,22 @@ COPY stylists (id, name) FROM stdin;
 -- Name: stylists_id_seq; Type: SEQUENCE SET; Schema: public; Owner: satchelgrant
 --
 
-SELECT pg_catalog.setval('stylists_id_seq', 1, false);
+SELECT pg_catalog.setval('stylists_id_seq', 5, true);
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: satchelgrant
+--
+
+COPY users (id, username, password) FROM stdin;
+\.
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: satchelgrant
+--
+
+SELECT pg_catalog.setval('users_id_seq', 1, true);
 
 
 --
@@ -223,6 +279,14 @@ ALTER TABLE ONLY clients
 
 ALTER TABLE ONLY stylists
     ADD CONSTRAINT stylists_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: satchelgrant
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
