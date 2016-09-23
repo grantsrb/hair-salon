@@ -6,7 +6,7 @@ public class Appointment {
   private String date;
   private String time;
   private int clientId;
-  private int stylistId;
+  // private int stylistId;
   private int id;
 
 
@@ -15,10 +15,8 @@ public class Appointment {
     this.date = _date;
     this.time = _time;
     this.clientId = _clientId;
+    // this.stylistId = Client.findById(_clientId).getStylistId();
   }
-
-  /////////////////////////////////////////////////////////////////////////////
-  // Local methods
 
   public String getDate() {
     return this.date;
@@ -26,6 +24,12 @@ public class Appointment {
 
   public void setDate(String _date) {
     this.date = _date;
+    try(Connection con = DB.sql2o.open()) {
+      con.createQuery("UPDATE appointments SET date=:date WHERE id=:id")
+      .addParameter("date", _date)
+      .addParameter("id", this.id)
+      .executeUpdate();
+    }
   }
 
   public String getTime() {
@@ -34,6 +38,12 @@ public class Appointment {
 
   public void setTime(String _time) {
     this.time = _time;
+    try(Connection con = DB.sql2o.open()) {
+      con.createQuery("UPDATE appointments SET time=:time WHERE id=:id")
+      .addParameter("time", _time)
+      .addParameter("id", this.id)
+      .executeUpdate();
+    }
   }
 
   public int getId() {
@@ -44,39 +54,28 @@ public class Appointment {
     return this.clientId;
   }
 
-  public int getStylistId() {
-    return this.stylistId;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-  // Local database methods
+  // public int getStylistId() {
+  //   return this.stylistId;
+  // }
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      this.id = (int) con.createQuery("INSERT INTO appointments (date, time, clientId, stylistId) VALUES (:date, :time, :clientId, :stylistId)", true)
+      this.id = (int) con.createQuery("INSERT INTO appointments (date, time, clientId) VALUES (:date, :time, :clientId)", true)
         .addParameter("date", this.date)
         .addParameter("time", this.time)
         .addParameter("clientId", this.clientId)
-        .addParameter("stylistId", this.stylistId)
+        // .addParameter("stylistId", this.stylistId)
         .executeUpdate().getKey();
     }
   }
 
-  public List<Client> getClients() {
-    try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT * FROM clients WHERE id = :id")
-        .addParameter("id", this.clientId)
-        .executeAndFetch(Client.class);
-    }
-  }
-
-  public List<Stylist> getStylists() {
-    try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT * FROM stylists WHERE id = :id")
-        .addParameter("id", this.stylistId)
-        .executeAndFetch(Stylist.class);
-    }
-  }
+  // public List<Stylist> getStylists() {
+  //   try(Connection con = DB.sql2o.open()) {
+  //     return con.createQuery("SELECT * FROM stylists WHERE id = :id")
+  //       .addParameter("id", this.stylistId)
+  //       .executeAndFetch(Stylist.class);
+  //   }
+  // }
 
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
@@ -86,7 +85,7 @@ public class Appointment {
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
   // Static methods
 
   public static Appointment findById(int _id) {
