@@ -157,6 +157,7 @@ public class App {
         Appointment newAppointment = new Appointment(date, time, clientId);
         if (!Appointment.conflictExists(newAppointment)) {
           newAppointment.save();
+          model = homepageModel();
         } else {
           model.put("appointmentConflict", true);
         }
