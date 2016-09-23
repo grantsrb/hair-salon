@@ -33,4 +33,16 @@ public class StylistTest {
     testStylist.delete();
     assertEquals("delete test", null, Stylist.findById(testStylist.getId()));
   }
+
+  @Test
+  public void getClients_returnsListOfAllClients_ArrayList() {
+    Stylist testStylist = new Stylist("Jom Terry");
+    testStylist.save();
+    Client testClient = new Client("Jilly Bill", testStylist.getId());
+    Client testClient2 = new Client("Silly Bjill", testStylist.getId());
+    testClient.save();
+    testClient2.save();
+    assertTrue("test 1",testStylist.getClients().get(0).equals(testClient));
+    assertTrue("test 2",testStylist.getClients().get(1).equals(testClient2));
+  }
 }

@@ -1,25 +1,5 @@
-<br>
-<p><strong>Click a word to see it's definition: </strong></p>
+<div class="row">
+  <div class="col-md-6">
 
-#if($words.size() > 0)
-  <ul>
-    #foreach($word in $words)
-      <li><a href="/word/$word.getId()">$word.getName()</a></li>
-    #end
-  </ul>
-#else
-  <p><em>No words have been added yet!</em></p>
-#end
-<br>
-<h3>Add a word to the dictionary:</h3>
-<form action="/new-word" method="post">
-  <div class="form-group">
-    <label for="word-name">Enter a word: </label>
-    <input type="text" id="word-name" name="word-name" class="form-control">
   </div>
-  <div class="form-group">
-    <label for="definition">Enter the definition: </label>
-    <input type="text" id="definition" name="definition" class="form-control">
-  </div>
-  <button type="submit" class="btn btn-primary">New Word</button>
-</form>
+</div>

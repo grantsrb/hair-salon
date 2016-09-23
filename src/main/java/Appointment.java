@@ -69,6 +69,16 @@ public class Appointment {
     }
   }
 
+  @Override
+  public boolean equals(Object _testObj) {
+    if(!(_testObj instanceof Appointment))
+      return false;
+    else {
+      Appointment appointmentCast = (Appointment) _testObj;
+      return (this.id == appointmentCast.getId() && this.clientId == appointmentCast.getClientId());
+    }
+  }
+
   // public List<Stylist> getStylists() {
   //   try(Connection con = DB.sql2o.open()) {
   //     return con.createQuery("SELECT * FROM stylists WHERE id = :id")

@@ -44,6 +44,27 @@ public class Stylist {
     }
   }
 
+  public List<Client> getClients() {
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM clients WHERE stylistId = :id")
+        .addParameter("id", this.id)
+        .executeAndFetch(Client.class);
+    }
+  }
+
+  public List<Appointment> getAppointments() {
+    List<Client> clients = this.getClients();
+    List<Appointment> appointments = new ArrayList<>();
+    // Double for loop to populate appointments list
+    for (int clientCount = 0; clientCount < clients.size(); clientCount++) {
+      List<Appointment> clientAppointments = clients.get(clientCount).getAppointments();
+      for(int appointmentCount = 0; appointmentCount < clientAppointments.size(); appointmentCount++) {
+        appointments.add(clientAppointments.get(appointmentCount));
+      }
+    }
+    return appointments;
+  }
+
   public static Stylist findById(int _id) {
     try (Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM stylists WHERE id = :id")

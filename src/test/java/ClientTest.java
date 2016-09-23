@@ -34,4 +34,17 @@ public class ClientTest {
     testClient.delete();
     assertEquals("delete test", null, Client.findById(testClient.getId()));
   }
+
+  @Test
+  public void getAppointments_returnsAllAppointmentsWithClientId_ArrayList() {
+    Client testClient = new Client("Jim Bean", 1);
+    testClient.save();
+    Appointment testAppointment = new Appointment("11/11", "11:11", testClient.getId());
+    Appointment testAppointment2 = new Appointment("12/12", "12:12", testClient.getId());
+    testAppointment.save();
+    testAppointment2.save();
+    List<Appointment> appts = testClient.getAppointments();
+    assertEquals("by appts list", appts.get(0), testAppointment);
+    assertEquals("by getAppointments list", testClient.getAppointments().get(1), testAppointment2);
+  }
 }
