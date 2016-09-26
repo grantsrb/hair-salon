@@ -1,0 +1,15 @@
+<h2>Edit $stylist.getName()</h2>
+<form action="/stylists/$stylist.getId()" method="post">
+  <div class="form-group">
+    <label for="edit-or-delete">Enter a new name for $stylist.getName():</label>
+    <input type="text" id="stylist-name" name="edit-or-delete">
+  </div>
+  <input type="submit" value="Make Changes">
+</form>
+
+<form action="/stylists/$stylist.getId()" method="post">
+  <input type="submit" name="edit-or-delete" value="Delete">
+</form>
+
+<a href="/stylists/$stylist.getId()">Back</a>
+<a href="/">Home</a>

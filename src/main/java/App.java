@@ -58,6 +58,15 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    get("/stylists/:stylistId/clients/:clientId/edit", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      int clientId = Integer.parseInt(request.params(":clientId"));
+      model.put("stylists", Stylist.getAll());
+      model.put("client", Client.findById(clientId));
+      model.put("template", "templates/client-edit.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
     get("/stylists/:stylistId/clients/:clientId", (request, response) -> {
       Map<String,Object> model = new HashMap<>();
       int clientId = Integer.parseInt(request.params(":clientId"));
@@ -68,12 +77,73 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/stylists/:stylistId/clients/:clientId", (request, response) -> {
+      int newStylistId = Integer.parseInt(request.queryParams("edit-stylist-id"));
+      String nameOrDelete = request.queryParams("edit-or-delete");
+      nameOrDelete = nameOrDelete.toLowerCase();
+      int clientId = Integer.parseInt(request.params(":clientId"));
+      Client client = Client.findById(clientId);
+      if (nameOrDelete.equals("delete")) {
+        client.delete();
+        return new ModelAndView(homepageModel(), layout);
+      } else {
+        client.setStylistId(newStylistId);
+        if (!nameOrDelete.equals(""))
+          client.setName(nameOrDelete);
+        Map<String,Object> model = new HashMap<>();
+        model.put("client", client);
+        model.put("stylist", Stylist.findById(newStylistId));
+        model.put("template", "templates/client-display.vtl");
+        return new ModelAndView(model, layout);
+      }
+    }, new VelocityTemplateEngine());
+
+    get("/stylists/:stylistId/edit", (request, response) -> {
+      Map<String,Object> model = new HashMap<>();
+      int stylistId = Integer.parseInt(request.params(":stylistId"));
+      model.put("stylist", Stylist.findById(stylistId));
+      model.put("template", "templates/stylist-edit.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/stylists/update",  (request, response) -> {
+      String direction = request.queryParams("hiddenStylistButton");
+      String stylistName = request.queryParams("stylist-name");
+      stylistName = stylistName.toLowerCase();
+      if (direction.equals("Add") && Stylist.findByName(stylistName) == null && !stylistName.equals("")) {
+        Stylist newStylist = new Stylist(stylistName);
+        newStylist.save();
+      } else {
+        if(Stylist.findByName(stylistName) != null && !stylistName.equals(""))
+          Stylist.findByName(stylistName).delete();
+      }
+      return new ModelAndView(homepageModel(), layout);
+    },new VelocityTemplateEngine());
+
     get("/stylists/:stylistId", (request, response) -> {
       Map<String,Object> model = new HashMap<>();
       int stylistId = Integer.parseInt(request.params(":stylistId"));
       model.put("stylist", Stylist.findById(stylistId));
       model.put("template", "templates/stylist-display.vtl");
       return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/stylists/:stylistId", (request, response) -> {
+      String nameOrDelete = request.queryParams("edit-or-delete");
+      nameOrDelete = nameOrDelete.toLowerCase();
+      int stylistId = Integer.parseInt(request.params(":stylistId"));
+      Stylist stylist = Stylist.findById(stylistId);
+      if (nameOrDelete.equals("delete")) {
+        stylist.delete();
+        return new ModelAndView(homepageModel(), layout);
+      } else {
+        Map<String,Object> model = new HashMap<>();
+        if (!nameOrDelete.equals(""))
+          stylist.setName(nameOrDelete);
+        model.put("stylist", stylist);
+        model.put("template", "templates/stylist-display.vtl");
+        return new ModelAndView(model, layout);
+      }
     }, new VelocityTemplateEngine());
 
     get("/sign-in",(request,response) -> {
@@ -114,20 +184,6 @@ public class App {
     post("/sign-out", (request, response) -> {
       User.setLogInStatus(false);
       User.setLoggedInUser(null);
-      return new ModelAndView(homepageModel(), layout);
-    },new VelocityTemplateEngine());
-
-    post("/stylists/update",  (request, response) -> {
-      String direction = request.queryParams("hiddenStylistButton");
-      String stylistName = request.queryParams("stylist-name");
-      stylistName = stylistName.toLowerCase();
-      if (direction.equals("Add") && Stylist.findByName(stylistName) == null && !stylistName.equals("")) {
-        Stylist newStylist = new Stylist(stylistName);
-        newStylist.save();
-      } else {
-        if(Stylist.findByName(stylistName) != null && !stylistName.equals(""))
-          Stylist.findByName(stylistName).delete();
-      }
       return new ModelAndView(homepageModel(), layout);
     },new VelocityTemplateEngine());
 

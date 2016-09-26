@@ -1,0 +1,29 @@
+<h2>Edit $client.getName()</h2>
+
+<form action="/stylists/$client.getStylistId()/clients/$client.getId()" method="post">
+  <div class="form-group">
+    <label for="edit-stylist-id">Change stylist: </label>
+    <select name="edit-stylist-id" class="form-control">
+      #foreach($stylist in $stylists)
+        #if($stylist.getId() == $client.getStylistId())
+          <option value="$stylist.getId()" selected="selected">$stylist.getName()</option>
+        #else
+          <option value="$stylist.getId()">$stylist.getName()</option>
+        #end
+      #end
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="edit-or-delete">Enter a new name for $client.getName():</label>
+    <input type="text" class="form-control" name="edit-or-delete">
+  </div>
+  <input type="submit" value="Make Changes">
+</form>
+
+<form action="/stylists/$client.getStylistId()/clients/$client.getId()" method="post">
+  <input type="hidden" name="edit-stylist-id" value="$client.getStylistId()">
+  <input type="submit" name="edit-or-delete" value="Delete">
+</form>
+
+<a href="/stylists/$client.getStylistId()/clients/$client.getId()">Back</a>
+<a href="/">Home</a>
